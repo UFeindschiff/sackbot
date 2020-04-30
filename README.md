@@ -10,7 +10,7 @@ The only supported audio source so far is YouTube
 * Pause and Resume Playback mid-song
 * Songs are skippable
 
-##Bugs and issues
+## Bugs and issues
 * Playback of a song occasionally stops shortly before the song is actually over - need to investigate the cause
 * Looping songs is currently broken
 * Can currently only join in either the root channel or a direct child channel of the root channel
