@@ -4,6 +4,7 @@ import (
 	"layeh.com/gumble/gumble"
 	"log"
 	"strings"
+	"strconv"
 )
 
 func sackBotMessageHandler(e *gumble.TextMessageEvent) {
@@ -59,6 +60,22 @@ func sackBotMessageHandler(e *gumble.TextMessageEvent) {
 				log.Println("Skipped playback")
 			case "!help":
 				client.Self.Channel.Send("SackBot usage: \n!add <Youtube-ID> adds a song to the queue\n!loop toggles looping the current song\n!info displays info about the bot\n!pause pauses playback\n!resume resumes playback\n!skip skips the current song\n!help prints this help message\n!quit exits the bot", false)
+			case "!volume":
+				if len(splitstring) < 2 {
+					client.Self.Channel.Send("You need to provide a volume level", false)
+				}
+				newvolume, err := strconv.ParseFloat(splitstring[1], 32)
+				if err != nil {
+					client.Self.Channel.Send("Failed to parse argument. Make sure it is a valid number", false)
+				} else if newvolume > 2.0 {
+					client.Self.Channel.Send("Volume must be 2.0 or lower (you won't make people go deaf here)", false)
+				} else {
+					activesong.Volume = float32(newvolume)
+					targetvolume = float32(newvolume)
+					client.Self.Channel.Send("Setting volume to " + splitstring[1], false)
+					log.Println("Setting volume to " + splitstring[1])
+				}
+				
 			case "!quit":
 				client.Self.Channel.Send("Quitting... Have a nice day :)", false)
 				log.Println("Got command to exit from user. Exiting...")

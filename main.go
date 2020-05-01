@@ -57,6 +57,7 @@ func main() {
 	if err != nil {
 		log.Println("Failed to join desired channel: " + err.Error())
 	}
+	targetvolume = 1.0
 	go playbackThread()
 	for exiterr := range terminationChan {
 		if exiterr != nil {

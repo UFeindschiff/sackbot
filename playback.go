@@ -10,6 +10,7 @@ import (
 var activesong *gumbleffmpeg.Stream
 var playbackChan chan *io.ReadCloser
 var loopCurrentSong bool
+var targetvolume float32
 
 func playbackThread() {
 	playbackChan = make(chan *io.ReadCloser, 4096)
@@ -17,6 +18,7 @@ func playbackThread() {
 		for ok := true; ok; ok = loopCurrentSong {
 			source := gumbleffmpeg.SourceReader(*song)
 			stream := gumbleffmpeg.New(client, source)
+			stream.Volume = targetvolume
 			activesong = stream
 			err := activesong.Play()
 			if err != nil {
