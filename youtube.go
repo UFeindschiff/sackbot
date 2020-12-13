@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/lithdew/youtube"
+	"github.com/UFeindschiff/youtube"
 	"errors"
 	"net/http"
 	"io"
@@ -22,7 +22,8 @@ func getAudioDataByIdWrapper(id string) (*io.ReadCloser, string, error) {
 func getAudioURLAndData(id string) (string, string, error) {
 	player, err := youtube.Load(youtube.StreamID(id))
 	if err != nil {
-		return "", "", errors.New("Failed to load video ID")
+		//return "", "", errors.New("Failed to load video ID")
+		return "", "", err
 	}
 	stream, ok := player.SourceFormats().AudioOnly().BestAudio()
 	if !ok {

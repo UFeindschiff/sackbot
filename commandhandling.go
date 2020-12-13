@@ -70,7 +70,9 @@ func sackBotMessageHandler(e *gumble.TextMessageEvent) {
 				} else if newvolume > 2.0 {
 					client.Self.Channel.Send("Volume must be 2.0 or lower (you won't make people go deaf here)", false)
 				} else {
-					activesong.Volume = float32(newvolume)
+					if activesong != nil {
+						activesong.Volume = float32(newvolume)
+					}
 					targetvolume = float32(newvolume)
 					client.Self.Channel.Send("Setting volume to " + splitstring[1], false)
 					log.Println("Setting volume to " + splitstring[1])
