@@ -3,7 +3,7 @@ module github.com/UFeindschiff/sackbot
 go 1.12
 
 require (
-	github.com/UFeindschiff/youtube v0.0.2
+	github.com/UFeindschiff/youtube v0.0.4
 	github.com/lithdew/bytesutil v0.0.0-20200409052507-d98389230a59
 	github.com/lithdew/nicehttp v0.0.0-20200422123956-0d3d3dd9b482
 	github.com/lithdew/youtube v0.0.0-20200524132213-a1fd5d688f8a
