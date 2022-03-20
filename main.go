@@ -15,6 +15,7 @@ var password 	string
 var server		string
 var channelname	string
 var insecureTLS	bool
+var no_video_fallback bool
 var client *gumble.Client //client is global so I can access the client from event listener functions without using inline event listners
 var terminationChan chan error //writing anything to this will terminate the bot
 
@@ -24,6 +25,7 @@ func init() {
 	flag.StringVar(&server, "server", "", "the server to join - needs to be formatted like <domain or IP>:<port>")
 	flag.StringVar(&channelname, "channelname", "", "the channel for the bot to join. Will join root channel if not set")
 	flag.BoolVar(&insecureTLS, "insecureTLS", false, "skip verification of the mumble server's TLS certificate")
+	flag.BoolVar(&no_video_fallback, "no_video_fallback", false, "do not fall back on grabbing a video in case no audio-only stream is available")
 }
 
 func main() {

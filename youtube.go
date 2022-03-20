@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"io"
+	"log"
 )
 
 func getAudioDataByIdWrapper(id string) (*io.ReadCloser, string, error) {
@@ -25,13 +26,35 @@ func getAudioURLAndData(id string) (string, string, error) {
 		//return "", "", errors.New("Failed to load video ID")
 		return "", "", err
 	}
-	stream, ok := player.SourceFormats().AudioOnly().BestAudio()
+	streams := player.SourceFormats().AudioOnly().SortByAudioQuality()
+	for _, stream := range streams {
+		log.Println(stream)
+		url, err := player.ResolveURL(stream)
+		
+		if err == nil {
+			return url, player.Title(), nil
+		}
+	}
+	if no_video_fallback {
+		return "", player.Title(), errors.New("Failed to get audio URL for " + player.Title() + ": " + err.Error())
+	} else {
+		return getMuxedVideoURLAndData(id)
+	}
+}
+
+func getMuxedVideoURLAndData(id string) (string, string, error) {
+	player, err := youtube.Load(youtube.StreamID(id))
+	if err != nil {
+		//return "", "", errors.New("Failed to load video ID")
+		return "", "", err
+	}
+	stream, ok := player.MuxedFormats().BestAudio()
 	if !ok {
-		return "", player.Title(), errors.New(player.Title() + " does not have an audio-only stream")
+		return "", player.Title(), errors.New(player.Title() + " does not have any streams")
 	}
 	url, err := player.ResolveURL(stream)
 	if err != nil {
-		return "", player.Title(), errors.New("Failed to get audio URL for " + player.Title())
+		return "", player.Title(), errors.New("Failed to get muxed video URL for " + player.Title() + ": " + err.Error())
 	}
 	return url, player.Title(), nil
 }

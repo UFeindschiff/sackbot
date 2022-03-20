@@ -31,7 +31,7 @@ func playbackThread() {
 }
 
 func playbackSongHandler(id string) (string, error) {
-	audiodata, title, err := getAudioDataByIdWrapper(id)
+	audiodata, title, err := getNewAudioDataByIdWrapper(id)
 	if err != nil {
 		return title, err
 	}
