@@ -15,10 +15,11 @@ func sackBotMessageHandler(e *gumble.TextMessageEvent) {
 				if len(splitstring) < 2 {
 					client.Self.Channel.Send("You need to provide an ID", false)
 				}
-				title, err := playbackSongHandler(splitstring[1])
+				videoID := extractVideoIDFromCommand(splitstring)
+				title, err := playbackSongHandler(videoID)
 				if err != nil {
-					client.Self.Channel.Send("Error adding requested ID \"" + splitstring[1] +"\": " + err.Error(), false)
-					log.Println("Error adding requested ID \"" + splitstring[1] +"\": " + err.Error())
+					client.Self.Channel.Send("Error adding requested ID \"" + videoID +"\": " + err.Error(), false)
+					log.Println("Error adding requested ID \"" + videoID +"\": " + err.Error())
 				} else {
 					client.Self.Channel.Send("Added " + title + " to playback queue", false)
 					log.Println("Added " + title + " to playback queue")
@@ -86,4 +87,25 @@ func sackBotMessageHandler(e *gumble.TextMessageEvent) {
 				client.Self.Channel.Send("Unknown command", false)
 		}
 	}
+}
+
+//This is needed as the Mumble Client supports HTML rendering and by default puts URLs as an HTML hyperlink, so I have to check whether the user just sent an ID or a hyperlink.
+func extractVideoIDFromCommand(splitcommand []string) string {
+	if len(splitcommand) < 2 {
+		//Nothing but the command prefix provided, return empty string
+		return ""
+	}
+	if splitcommand[1] != "<a" {
+		//We don't have a hyperlink, so just use what we got as videoID
+		return splitcommand[1]
+	}
+	if len(splitcommand) < 3 {
+		//There is no actual link, but just <a was provided. Without this check, the bot would panic
+		return ""
+	}
+	splitstring := strings.Split(splitcommand[2], ">")
+	if len(splitstring) < 2 {
+		return ""
+	}
+	return strings.TrimSuffix(splitstring[1], "</a")
 }
