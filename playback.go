@@ -5,6 +5,7 @@ import (
 	"layeh.com/gumble/gumbleffmpeg"
 	"io"
 	"log"
+	"strings"
 )
 
 var activesong *gumbleffmpeg.Stream
@@ -31,6 +32,15 @@ func playbackThread() {
 }
 
 func playbackSongHandler(id string) (string, error) {
+	id = strings.TrimPrefix(id, "https://www.youtube.com/watch?v=")
+	if legacyFetching {
+		audiodata, title, err := getAudioDataByIdWrapper(id)
+		if err != nil {
+			return title, err
+		}
+		playbackChan <- audiodata
+		return title, nil
+	}
 	audiodata, title, err := getNewAudioDataByIdWrapper(id)
 	if err != nil {
 		return title, err
