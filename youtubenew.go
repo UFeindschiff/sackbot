@@ -5,7 +5,7 @@ import (
 	"errors"
 // 	"net/http"
 	"io"
-	"log"
+// 	"log"
 )
 
 func getNewAudioDataByIdWrapper(id string) (*io.ReadCloser, string, error) {
@@ -17,7 +17,7 @@ func getNewAudioDataByIdWrapper(id string) (*io.ReadCloser, string, error) {
 	
 	audioformats := video.Formats.Type("audio")
 	audioformats.Sort()
-	log.Println(audioformats)
+// 	log.Println(audioformats)
 	
 	stream, _, err := client.GetStream(video, &audioformats[0])
 	if err != nil {
