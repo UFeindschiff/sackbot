@@ -23,10 +23,6 @@ Usage of ./sackbot:
         the channel for the bot to join. Will join root channel if not set
   -insecureTLS
         skip verification of the mumble server's TLS certificate
-  -legacyFetching
-        use the legacy way of fetching audio from a YouTube stream. Tends to fail for many videos and takes longer, but may result in better audio quality
-  -no_video_fallback
-        do not fall back on grabbing a video in case no audio-only stream is available
   -password string
         server password, should the server require one
   -server string
@@ -36,7 +32,7 @@ Usage of ./sackbot:
 ```
 
 ## Building
-Building requires Go 1.12 or newer. Simply clone the repository and run `make`. Go's dependency system will take care of fetching any library dependencies
+Building requires Go 1.23 or newer. Simply clone the repository and run `make`. Go's dependency system will take care of fetching any library dependencies
 
 ## License
 SackBot is released under the terms of the 2-clause BSD license. It uses the [gumble](https://github.com/layeh/gumble) library which is licensed under the terms of the Mozilla Public License 2.0
