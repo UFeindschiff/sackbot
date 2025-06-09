@@ -1,17 +1,22 @@
 module github.com/UFeindschiff/sackbot
 
-go 1.12
+go 1.23.0
+
+toolchain go1.24.3
 
 require (
-	github.com/UFeindschiff/youtube v0.0.4
-	github.com/davecgh/go-spew v1.1.1
-	github.com/kkdai/youtube/v2 v2.7.10
-	github.com/lithdew/bytesutil v0.0.0-20200409052507-d98389230a59
-	github.com/lithdew/nicehttp v0.0.0-20200422123956-0d3d3dd9b482
-	github.com/lithdew/youtube v0.0.0-20200524132213-a1fd5d688f8a
-	github.com/stretchr/testify v1.7.0
-	github.com/valyala/fasthttp v1.12.0
-	github.com/valyala/fastjson v1.5.0
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	layeh.com/gumble v0.0.0-20200818122324-146f9205029b
+	github.com/kkdai/youtube/v2 v2.10.4
+	layeh.com/gumble v0.0.0-20221205141517-d1df60a3cc14
+)
+
+require (
+	github.com/bitly/go-simplejson v0.5.1 // indirect
+	github.com/dlclark/regexp2 v1.11.5 // indirect
+	github.com/dop251/goja v0.0.0-20250125213203-5ef83b82af17 // indirect
+	github.com/go-sourcemap/sourcemap v2.1.4+incompatible // indirect
+	github.com/golang/protobuf v1.3.1 // indirect
+	github.com/google/pprof v0.0.0-20250208200701-d0013a598941 // indirect
+	golang.org/x/net v0.40.0 // indirect
+	golang.org/x/text v0.25.0 // indirect
+	layeh.com/gopus v0.0.0-20161224163843-0ebf989153aa // indirect
 )

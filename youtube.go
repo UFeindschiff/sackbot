@@ -1,71 +1,27 @@
 package main
 
 import (
-	"github.com/UFeindschiff/youtube"
+	"github.com/kkdai/youtube/v2"
 	"errors"
-	"net/http"
 	"io"
 	"log"
 )
 
-func getAudioDataByIdWrapper(id string) (*io.ReadCloser, string, error) {
-	url, title, err := getAudioURLAndData(id)
-	if err != nil {
-		return nil, title, err
-	}
-	retval, err := getAudioFromURL(url)
-	if err != nil {
-		return nil, title, err
-	}
-	return retval, title, nil
-}
+var ytclient *youtube.Client = &youtube.Client{}
 
-func getAudioURLAndData(id string) (string, string, error) {
-	player, err := youtube.Load(youtube.StreamID(id))
+func getAudioDataByID(id string) (*io.ReadCloser, int64, string, error) {
+	videoStats, err := ytclient.GetVideo(id)
 	if err != nil {
-		//return "", "", errors.New("Failed to load video ID")
-		return "", "", err
+		return nil, 0, "", err
+		log.Println("Error fetching video: " + err.Error())
 	}
-	streams := player.SourceFormats().AudioOnly().SortByAudioQuality()
-	for _, stream := range streams {
-		log.Println(stream)
-		url, err := player.ResolveURL(stream)
-		
-		if err == nil {
-			return url, player.Title(), nil
-		}
+	formats := videoStats.Formats.Type("audio/mp4")
+	if len(formats) < 1 {
+		return nil, 0, videoStats.Title, errors.New("Specified video contains no MP4 Audio Stream")
 	}
-	if no_video_fallback {
-		return "", player.Title(), errors.New("Failed to get audio URL for " + player.Title() + ": " + err.Error())
-	} else {
-		return getMuxedVideoURLAndData(id)
-	}
-}
-
-func getMuxedVideoURLAndData(id string) (string, string, error) {
-	player, err := youtube.Load(youtube.StreamID(id))
+	stream, size, err := ytclient.GetStream(videoStats, &formats[0])
 	if err != nil {
-		//return "", "", errors.New("Failed to load video ID")
-		return "", "", err
+		log.Println("Error fetching audio from video: " + err.Error())
 	}
-	stream, ok := player.MuxedFormats().BestAudio()
-	if !ok {
-		return "", player.Title(), errors.New(player.Title() + " does not have any streams")
-	}
-	url, err := player.ResolveURL(stream)
-	if err != nil {
-		return "", player.Title(), errors.New("Failed to get muxed video URL for " + player.Title() + ": " + err.Error())
-	}
-	return url, player.Title(), nil
-}
-
-func getAudioFromURL(url string) (*io.ReadCloser, error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-	if resp.StatusCode != 200 {
-		return nil, errors.New("Request succeeded, but received non-OK Response: " + resp.Status)
-	}
-	return &resp.Body, nil
+	return &stream, size, videoStats.Title, err
 }

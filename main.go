@@ -26,8 +26,6 @@ func init() {
 	flag.StringVar(&server, "server", "", "the server to join - needs to be formatted like <domain or IP>:<port>")
 	flag.StringVar(&channelname, "channelname", "", "the channel for the bot to join. Will join root channel if not set")
 	flag.BoolVar(&insecureTLS, "insecureTLS", false, "skip verification of the mumble server's TLS certificate")
-	flag.BoolVar(&no_video_fallback, "no_video_fallback", false, "do not fall back on grabbing a video in case no audio-only stream is available")
-	flag.BoolVar(&legacyFetching, "legacyFetching", false, "use the legacy way of fetching audio from a YouTube stream. Tends to fail for many videos and takes longer, but may result in better audio quality")
 }
 
 func main() {
